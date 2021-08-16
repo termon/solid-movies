@@ -17,7 +17,7 @@ export interface ICredit {
 
 export interface IGenre {
   id: number,
-  name: String
+  name: string
 }
 
 export interface IImage {

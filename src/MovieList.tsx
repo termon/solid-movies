@@ -1,13 +1,12 @@
-import { Component, createSignal, createEffect, createResource, For } from "solid-js";
-import {IMovie, IShortMovie} from './types'
+import { Component, For } from "solid-js";
+import Paginator from "./Paginator";
+import {movies, setMovieId} from './solid-store'
 
-export default ({movies, selected }) => {
-    const [id,setId] = selected 
+const MovieList: Component = () => {
     return (
         <>
             <h3>Movie List</h3>
-            <span>{movies.loading && "Loading..."}</span>
-                  
+            <span>{movies.loading && "Loading..."}</span>           
             <table class="table table-striped table-hover">
                 <thead>
                     <tr>
@@ -17,9 +16,10 @@ export default ({movies, selected }) => {
                     </tr>
                 </thead>
                 <tbody> 
-                <For each={movies()}>{ (m:IShortMovie,i) =>
+                <For each={movies()}>{ 
+                    (m,i) =>
                     <tr>
-                        <td><a href="#" onclick={() => setId(m.id) }>{ m.id }</a></td>
+                        <td><a href="#" onclick={() => setMovieId(m.id) }>{ m.id }</a></td>
                         <td>{ m.title }</td>
                         <td>{ m.release_date }</td>    
                     </tr> 
@@ -28,6 +28,6 @@ export default ({movies, selected }) => {
            </table>
        </>
     );
-
 }
+export default MovieList
  
