@@ -10,8 +10,9 @@ const App: Component = () => {
   const [query,setQuery] = createSignal('')
   const [id,setId] = createSignal()
 
-  const [movies] = createResource(query, fetchMovies)
+  const [movies] = createResource(query, fetchMovies, {initialValue: []})
   const [movie]  = createResource(id,fetchMovie)
+
   createEffect( () => { console.log('Query', movies()) })
   createEffect( () => { console.log('Id', id()) })
 
