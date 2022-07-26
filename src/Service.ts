@@ -1,6 +1,10 @@
 import {IShortMovie, IMovie} from './types'
 
-export const fetchMovies = async (search:string) => {
+export function posterUrl(poster:string, size='original', path = 'https://image.tmdb.org/t/p/') {
+    return path + size + poster  
+}
+
+export const fetchMovies = async (search:string):Promise<IShortMovie[]> => {
     if (search && search.length > 0) {
         const resp = await fetch(_query(search),_getTokenObj())
         const json = await resp.json()
@@ -9,26 +13,12 @@ export const fetchMovies = async (search:string) => {
     return []
 }
 
-export const fetchMovie = async (id:any) => {   
+export const fetchMovie = async (id:any) : Promise<IMovie> => {   
     const resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,images,videos`, _getTokenObj())
     const json = await resp.json()
     return json
 }
 
-
-const _fetchMoviesSuccessAction = (json: {results: IShortMovie[]}) => {
-    if (json.results) {  
-        return json.results   
-    }
-    return [] 
-}
-
-const _fetchMovieSuccessAction = (json: IMovie) => {   
-    if (json.title) {
-            return json
-    }
-    return undefined
-}
 
 const _fetchFailureAction = (error:any) => {
         console.log('error', error)
@@ -51,9 +41,8 @@ const _query = (search:string) => {
 }
 
 const _getTokenObj = () => { 
-    //const TOKEN = import.meta.env.VITE_MOVIEDB_TOKEN
-    const TOKEN='eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI0NDZlNGVlOTVkMTM0ZGE4ZDllOTUyZDg3ZWQ5OGViNyIsInN1YiI6IjVhYTNmYmY2OTI1MTQxMjc4ZDAwZDU0NCIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.lx2bw91VSdbeU-NVOeg2lfOBCUKoRU7mlZGktWK-iZc'
-
+    const TOKEN = import.meta.env.VITE_MOVIEDB_TOKEN
+ 
     return {
         method: 'GET',
         headers: new Headers(
