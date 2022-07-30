@@ -32,7 +32,7 @@ const _movieQueryUrl = (search:string, page = 1) => {
 
 const fetchMovies = async (s:string):Promise<IShortMovie[]> => { 
     if (s && s.length > 0) {  
-        const resp = await fetch(_movieQueryUrl(s),_getTokenObj())
+        const resp = await fetch(_movieQueryUrl(s, page()),_getTokenObj())
         const json = await resp.json()
         console.log('fetchMovies', s, json.results)
         return json.results
@@ -40,7 +40,7 @@ const fetchMovies = async (s:string):Promise<IShortMovie[]> => {
     return []
 } 
 
-const fetchMovie = async (id) => {   
+const fetchMovie = async (id): Promise<IMovie> => {   
     var resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,images,videos`, _getTokenObj())
     var json = resp.json()
     console.log('fetchMovie', id, json)
@@ -51,8 +51,8 @@ const fetchMovie = async (id) => {
 export const [search, setSearch] = createSignal("")
 export const [movieId, setMovieId] = createSignal()
 
-export const [movie]  = createResource<IMovie>(movieId,fetchMovie)
-export const [movies] = createResource<IMovie[]>(search, fetchMovies, {initialValue: []})
+export const [movie]  = createResource(movieId,fetchMovie)
+export const [movies] = createResource(search, fetchMovies, {initialValue: []})
 
 export const posterUrl = (poster:string, size='original', path = 'https://image.tmdb.org/t/p/') => path + size + poster  
 

@@ -14,6 +14,7 @@
     "vite-plugin-solid": "^2.0.1"
   },
   "dependencies": {
-    "solid-js": "^1.0.7"
+    "caniuse-lite": "^1.0.30001373",
+    "solid-js": "^1.4"
   }
 }
