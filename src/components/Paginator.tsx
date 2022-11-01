@@ -1,5 +1,5 @@
 import { Component, For } from "solid-js";
-import {movies, page, setPage, pages, setPages} from './solid-store'
+import store from '../solid-store'
 
 function generator(c, m): any[] {
     const current = c
@@ -32,10 +32,13 @@ function generator(c, m): any[] {
     return rangeWithDots;
 }
 
-const paginate = (page, movies) => generator(page(),movies().length)
+
 
 const Paginator: Component = () => {
-    
+    const {setPage, page, movies, pages, setPages } = store
+
+    const paginate = (page, movies) => generator(page(),movies().length)
+        
     setPages(paginate(page, movies))
 
     const moveNext = () => {

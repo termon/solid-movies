@@ -1,6 +1,6 @@
 import { For } from "solid-js";
-import { posterUrl } from "./solid-store";
-import { IImage } from "./types";
+import { posterUrl } from "../solid-store";
+import { IImage } from "../types";
 
 export default (props) => {
   const posters: () => IImage[] = props.posters 

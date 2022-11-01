@@ -1,4 +1,4 @@
-import { createSignal, createResource } from 'solid-js'
+import { createSignal, createMemo, createRoot, createResource } from "solid-js";
 import { IMovie, IShortMovie } from './types'
 
 // API token should be stored in .env.* under key VITE_MOVIEDB_TOKEN
@@ -30,11 +30,11 @@ const _movieQueryUrl = (search:string, page = 1) => {
     }
 }
 
-const fetchMovies = async (s:string):Promise<IShortMovie[]> => { 
-    if (s && s.length > 0) {  
-        const resp = await fetch(_movieQueryUrl(s, page()),_getTokenObj())
+const fetchMovies = async (search:{query:string,page:number}):Promise<IShortMovie[]> => { 
+    if (search.query && search.query.length > 0) {  
+        const resp = await fetch(_movieQueryUrl(search.query,search.page),_getTokenObj())
         const json = await resp.json()
-        console.log('fetchMovies', s, json.results)
+        console.log('fetchMovies', search.query, json.results)
         return json.results
     }
     return []
@@ -47,18 +47,26 @@ const fetchMovie = async (id): Promise<IMovie> => {
     return json
 }
 
-// exported store API
-export const [search, setSearch] = createSignal("")
-export const [movieId, setMovieId] = createSignal()
-
-export const [movie]  = createResource(movieId,fetchMovie)
-export const [movies] = createResource(search, fetchMovies, {initialValue: []})
-
 export const posterUrl = (poster:string, size='original', path = 'https://image.tmdb.org/t/p/') => path + size + poster  
 
-// used for paginator - better way to make a reactive paginator?
-export const [page, setPage] = createSignal(1)
-export const [pages, setPages] = createSignal([])
+function createStore() {
+
+    // exported store API
+    const [search, setSearch] = createSignal({query:'', page:1})
+    const [movieId, setMovieId] = createSignal()
+    const [pages,setPages] = createSignal([])
 
 
+    const [movie]  = createResource(movieId,fetchMovie)
+    const [movies] = createResource(search, fetchMovies, {initialValue: []})
 
+    const setPage = (p:number)  => setSearch({...search(), page: p})
+    const setQuery = (q:string) => setSearch({...search(), query:q})
+    const page = () => search().page
+    const query = () => search().query
+
+    return { setPage,setQuery, page, pages, setPages, query, movieId, setMovieId, movie, movies };
+
+}
+
+export default createRoot(createStore);

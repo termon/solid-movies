@@ -1,8 +1,10 @@
 import { Component, Show } from "solid-js";
 import MovieCarousel from "./MovieCarousel"
-import {movie} from './solid-store'
+import store from '../solid-store'
 
 const MovieView: Component = () => {
+  const { movie } = store  
+
   return (
     <Show when={movie()}>
       <div class="card shadow-lg p-3 mb-5">

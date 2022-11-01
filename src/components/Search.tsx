@@ -1,34 +1,34 @@
 import { Component, createSignal } from "solid-js";
-import { search, setSearch } from './solid-store'
+import store from '../solid-store'
 
 const Search: Component = () => {
-  
+  const { query, setQuery } = store  
   return (
 
-      <form id="searchForm">
+      <form onsubmit={(e) => e.preventDefault()} id="searchForm">
             <div class="row">
-                <input class="col-10 form-input" value={ search() } placeholder="search...." onclick={(e)=>setSearch(e.currentTarget.value)}/>
+                <input class="col-10 form-input" value={ query() } placeholder="search...." onchange={(e)=>setQuery(e.currentTarget.value)}/>
                 <button type="reset" class="btn btn-warning btn-rounded col-1 mx-3" >Clear</button>
             </div> 
             <div class="row mt-2"> 
                 <div class="col-2">
-                    <input type="radio" name="customSearch" value="popular" onclick={(e)=>setSearch(`:${e.currentTarget.value}`)}/>
+                    <input type="radio" name="customSearch" value="popular" onclick={(e)=> setQuery(`:${e.currentTarget.value}`)}/>
                     <label for="customSearch">Popular</label>
                 </div>
                 <div class="col-2">
-                    <input type="radio" name="customSearch" value="top" onclick={(e)=>setSearch(`:${e.currentTarget.value}`)}/>
+                    <input type="radio" name="customSearch" value="top" onclick={(e)=>setQuery(`:${e.currentTarget.value}`)}/>
                     <label for="customSearch">Top Rated</label>
                 </div>
                 <div class="col-2">
-                    <input type="radio" name="customSearch" value="trending" onclick={(e)=>setSearch(`:${e.currentTarget.value}`)} />
+                    <input type="radio" name="customSearch" value="trending" onclick={(e)=>setQuery(`:${e.currentTarget.value}`)} />
                     <label for="customSearch">Trending</label>
                 </div>
                 <div class="col-2">
-                    <input type="radio" name="customSearch" value="playing" onclick={(e)=>setSearch(`:${e.currentTarget.value}`)} />
+                    <input type="radio" name="customSearch" value="playing" onclick={(e)=>setQuery(`:${e.currentTarget.value}`)} />
                     <label for="customSearch">Now Playing</label>
                 </div>
                 <div class="col-2">
-                    <input type="radio" name="customSearch" value="upcoming" onclick={(e)=>setSearch(`:${e.currentTarget.value}`)} />
+                    <input type="radio" name="customSearch" value="upcoming" onclick={(e)=>setQuery(`:${e.currentTarget.value}`)} />
                     <label for="customSearch">Upcoming</label>
                 </div>
             </div>  

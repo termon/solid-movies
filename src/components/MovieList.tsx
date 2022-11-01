@@ -1,8 +1,9 @@
 import { Component, For } from "solid-js";
 import Paginator from "./Paginator";
-import {movies, setMovieId} from './solid-store'
+import store from '../solid-store'
 
 const MovieList: Component = () => {
+    const {movies, setMovieId} = store
     return (
         <>
             <h3>Movie List</h3>
@@ -26,6 +27,7 @@ const MovieList: Component = () => {
                 }</For> 
                 </tbody>
            </table>
+           <Paginator />
        </>
     );
 }

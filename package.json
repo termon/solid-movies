@@ -1,7 +1,7 @@
 {
-  "name": "vite-template-solid",
-  "version": "0.0.0",
-  "description": "",
+  "name": "solid-movie-browser",
+  "version": "1.0",
+  "description": "a moviedb search tool",
   "scripts": {
     "start": "vite",
     "dev": "vite",
@@ -10,11 +10,11 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "vite": "^2.4.4",
-    "vite-plugin-solid": "^2.0.1"
+    "vite": "^3.0.9",
+    "vite-plugin-solid": "^2.3.0"
   },
   "dependencies": {
     "caniuse-lite": "^1.0.30001373",
-    "solid-js": "^1.4"
+    "solid-js": "^1.5.1"
   }
 }

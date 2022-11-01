@@ -1,9 +1,8 @@
 import { Component } from "solid-js";
 
-import MovieList from './MovieList'
-import MovieView from './MovieView'
-import Paginator from "./Paginator";
-import Search from './Search'
+import MovieList from './components/MovieList'
+import MovieView from './components/MovieView'
+import Search from './components/Search'
 
 const App: Component = () => {
   return (
