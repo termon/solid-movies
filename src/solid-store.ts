@@ -1,4 +1,4 @@
-import { createSignal, createMemo, createRoot, createResource } from "solid-js";
+import { createSignal, createRoot, createResource } from "solid-js";
 import { IMovie, IShortMovie } from './types'
 
 // API token should be stored in .env.* under key VITE_MOVIEDB_TOKEN
@@ -34,7 +34,7 @@ const fetchMovies = async (search:{query:string,page:number}):Promise<IShortMovi
     if (search.query && search.query.length > 0) {  
         const resp = await fetch(_movieQueryUrl(search.query,search.page),_getTokenObj())
         const json = await resp.json()
-        console.log('fetchMovies', search.query, json.results)
+        //console.log('fetchMovies', search.query, json.results,_movieQueryUrl(search.query,search.page))
         return json.results
     }
     return []
@@ -43,7 +43,7 @@ const fetchMovies = async (search:{query:string,page:number}):Promise<IShortMovi
 const fetchMovie = async (id): Promise<IMovie> => {   
     var resp = await fetch(`https://api.themoviedb.org/3/movie/${id}?append_to_response=credits,images,videos`, _getTokenObj())
     var json = resp.json()
-    console.log('fetchMovie', id, json)
+    console.log('fetchMovie returns a promise', id, json)
     return json
 }
 
@@ -54,8 +54,6 @@ function createStore() {
     // exported store API
     const [search, setSearch] = createSignal({query:'', page:1})
     const [movieId, setMovieId] = createSignal()
-    const [pages,setPages] = createSignal([])
-
 
     const [movie]  = createResource(movieId,fetchMovie)
     const [movies] = createResource(search, fetchMovies, {initialValue: []})
@@ -65,7 +63,7 @@ function createStore() {
     const page = () => search().page
     const query = () => search().query
 
-    return { setPage,setQuery, page, pages, setPages, query, movieId, setMovieId, movie, movies };
+    return { setPage,setQuery, page, query, movieId, setMovieId, movie, movies };
 
 }
 

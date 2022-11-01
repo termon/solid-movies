@@ -1,6 +1,6 @@
 import { Component, For } from "solid-js";
-import Paginator from "./Paginator";
 import store from '../solid-store'
+import Paginator from "./Paginator";
 
 const MovieList: Component = () => {
     const {movies, setMovieId} = store

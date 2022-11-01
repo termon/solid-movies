@@ -1,4 +1,4 @@
-import { Component, For } from "solid-js";
+import { Component, createEffect, createSignal, For } from "solid-js";
 import store from '../solid-store'
 
 function generator(c, m): any[] {
@@ -28,58 +28,57 @@ function generator(c, m): any[] {
         rangeWithDots.push(i);
         l = i;
     }
-    console.log(`paginate page:${current} last:${last} pages:${rangeWithDots}`)
+    //console.log(`paginate page:${current} last:${last} pages:${rangeWithDots}`)
     return rangeWithDots;
 }
 
 
-
 const Paginator: Component = () => {
-    const {setPage, page, movies, pages, setPages } = store
+    const {setPage, page, movies } = store
 
-    const paginate = (page, movies) => generator(page(),movies().length)
-        
-    setPages(paginate(page, movies))
+    const [pages,setPages] = createSignal([])
 
+    // regenerate paginator pages every time the page or movies changes
+    createEffect(() => setPages(generator(page(),movies().length)) );
+    
     const moveNext = () => {
         if (page() < pages().length) {
             setPage(page()+1)
-            setPages(paginate(page, movies))
         }
     }
     const movePrev = () => {
         if (page() > 1) {
             setPage(page()-1)
-            setPages(paginate(page, movies))
         }
     }
     const moveToPage = (p) => {
         setPage(p)
-        setPages(paginate(page, movies))
     }
   
     return (
         <nav aria-label="Page navigation example">
             <ul class="pagination">
-            <li class="page-item">
-                <button class="page-link" onclick={movePrev} aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                </button>
-            </li> 
-            <For each={pages()}>{ 
-                (p,i) =>  {
-                    if (p === '...') return <li class="page-item"><button class="page-link">{p}</button></li>
-                    else if (p == page()) return <li class="page-item" classList={{active: p == page()}}><button class="page-link" onclick={()=>moveToPage(p)}>{p}</button></li>
-                    else return <li class="page-item"><button class="page-link" onclick={()=>moveToPage(p)}>{p}</button></li>
+                <li class="page-item" classList={{disabled: page() === 1}}>
+                    <button class="page-link" onclick={movePrev} aria-label="Previous">
+                        <span aria-hidden="true">&laquo;</span>
+                    </button>
+                </li> 
+                <For each={pages()}>{ 
+                    (p,i) => (p === '...') ? 
+                        <li class="page-item">
+                            <a class="page-link">{p}</a>
+                        </li>
+                        :                       
+                        <li class="page-item" classList={{active: page() === p}}>
+                            <button class="page-link" onclick={()=>moveToPage(p)}>{p}</button>
+                        </li>                    
                 }
-            }
-            </For>
-        
-            <li class="page-item">
-                <button class="page-link" onclick={moveNext} aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                </button>
-            </li>
+                </For>
+                <li class="page-item" classList={{disabled: page() === pages().at(-1)}}>
+                    <button class="page-link" onclick={moveNext} aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                    </button>
+                </li>
             </ul>
         </nav>
     )

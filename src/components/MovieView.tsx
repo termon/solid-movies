@@ -6,8 +6,9 @@ const MovieView: Component = () => {
   const { movie } = store  
 
   return (
-    <Show when={movie()}>
-      <div class="card shadow-lg p-3 mb-5">
+    /* note: movie is a promise and is resolved by Show  */
+    <Show when={movie()} >
+      <div class="card shadow-lg mt-3 p-3 mb-5">
           <div class="row g-0">    
               <div class="col-md-4">
               
